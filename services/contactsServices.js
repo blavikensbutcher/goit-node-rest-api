@@ -54,3 +54,28 @@ export async function addContact(name, email, phone) {
 
   return newUser;
 }
+
+export async function changeContact(id, name, email, phone) {
+
+    const contacts = await listContacts();
+    const contactID = contacts.findIndex(contact => contact.id === id)
+
+    console.log(contacts[contactID])
+
+  const updatedContact = {
+      id,
+      name: name || contacts[contactID].name,
+      email: email || contacts[contactID].email,
+      phone: phone || contacts[contactID].phone
+  };
+
+    contacts[contactID] = updatedContact;
+
+
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+
+    return updatedContact
+}
+
+
