@@ -58,9 +58,14 @@ export const updateContact = async (req, res, next) => {
         const {name, email, phone } = req.body;
         const updatedContact = await changeContact(id, name, email,phone)
 
-        if ( !name && !email && !phone) {
-            throw httpError(400, "At least one of fields must be not empty")
+        if (!updatedContact) {
+            throw httpError(404, "Not found")
         }
+
+        if (!name && !email && !phone) {
+            throw httpError(400, "Body must have at least one field")
+        }
+
 
         res.status(200).json(updatedContact)
 

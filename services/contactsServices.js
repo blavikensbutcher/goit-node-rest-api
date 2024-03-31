@@ -60,7 +60,10 @@ export async function changeContact(id, name, email, phone) {
     const contacts = await listContacts();
     const contactID = contacts.findIndex(contact => contact.id === id)
 
-    console.log(contacts[contactID])
+    if (contactID === -1) {
+        return null
+    }
+
 
   const updatedContact = {
       id,
