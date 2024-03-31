@@ -56,29 +56,23 @@ export async function addContact(name, email, phone) {
 }
 
 export async function changeContact(id, name, email, phone) {
+  const contacts = await listContacts();
+  const contactID = contacts.findIndex((contact) => contact.id === id);
 
-    const contacts = await listContacts();
-    const contactID = contacts.findIndex(contact => contact.id === id)
-
-    if (contactID === -1) {
-        return null
-    }
-
+  if (contactID === -1) {
+    return null;
+  }
 
   const updatedContact = {
-      id,
-      name: name || contacts[contactID].name,
-      email: email || contacts[contactID].email,
-      phone: phone || contacts[contactID].phone
+    id,
+    name: name || contacts[contactID].name,
+    email: email || contacts[contactID].email,
+    phone: phone || contacts[contactID].phone,
   };
 
-    contacts[contactID] = updatedContact;
+  contacts[contactID] = updatedContact;
 
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
-
-    return updatedContact
+  return updatedContact;
 }
-
-
