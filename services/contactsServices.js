@@ -1,19 +1,5 @@
 import { promises as fs } from "fs";
 import path from "path";
-import mongoose from "mongoose";
-import dotenv from "dotenv"
-
-
-
-dotenv.config()
-
-mongoose.connect(process.env.DB_HOST)
-    .then(() => console.log("Database connection successful"))
-    .catch((error) => {
-      console.log("Database connect unsuccessfully")
-      console.error(error)
-      process.exit(1);
-    })
 
 
 const contactsPath = path.resolve("db", "contacts.json");
