@@ -24,7 +24,7 @@ export async function addContact(name, email, phone, favorite) {
 
 export async function changeContact(contactID, name, email, phone, favorite) {
   return Contact.findByIdAndUpdate(
-    id,
+    contactID,
     { contactID, name, email, phone, favorite },
     { new: true },
   );
