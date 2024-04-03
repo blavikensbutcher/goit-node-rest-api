@@ -1,8 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { Contact } from "../schemas/contact.js";
-
-const contactsPath = path.resolve("db", "contacts.json");
 
 export async function listContacts() {
   //Get all data from bd

@@ -75,6 +75,5 @@ export const updateFavorite = async (req,res,next) => {
 
   const updatedContact = await updateStatusContact(id, favorite)
 
-
   res.status(200).json(updatedContact)
 }
