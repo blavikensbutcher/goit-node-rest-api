@@ -22,7 +22,7 @@ export const getOneContact = async (req, res, next) => {
     const contact = await getContactById(id);
 
     if (!contact) {
-      throw httpError(404, "Not Found");
+      throw httpError(404);
     }
     res.status(200).json(contact);
   } catch (e) {
@@ -36,7 +36,7 @@ export const deleteContact = async (req, res, next) => {
     const removedContact = await removeContact(id);
 
     if (!removedContact) {
-      throw httpError(404, "Not Found");
+      throw httpError(404);
     }
 
     res.status(200).json(removedContact);
@@ -63,6 +63,10 @@ export const updateContact = async (req, res, next) => {
     const { name, email, phone, favorite } = req.body;
     const updatedContact = await changeContact(id, name, email, phone, favorite);
 
+    if (!updatedContact) {
+      throw httpError(404)
+    }
+
     res.status(200).json(updatedContact);
   } catch (e) {
     next(e);
@@ -74,6 +78,10 @@ export const updateFavorite = async (req,res,next) => {
   const { favorite } = req.body;
 
   const updatedContact = await updateStatusContact(id, favorite)
+
+  if (!updatedContact) {
+    throw httpError(404)
+  }
 
   res.status(200).json(updatedContact)
 }
