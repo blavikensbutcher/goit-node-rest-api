@@ -74,14 +74,18 @@ export const updateContact = async (req, res, next) => {
 };
 
 export const updateFavorite = async (req,res,next) => {
-  const { id } = req.params;
-  const { favorite } = req.body;
+  try {
+    const { id } = req.params;
+    const { favorite } = req.body;
 
-  const updatedContact = await updateStatusContact(id, favorite)
+    const updatedContact = await updateStatusContact(id, favorite)
 
-  if (!updatedContact) {
-    throw httpError(404)
+    if (!updatedContact) {
+      throw httpError(404)
+    }
+
+    res.status(200).json(updatedContact)
+  } catch (e) {
+    next(e)
   }
-
-  res.status(200).json(updatedContact)
 }
