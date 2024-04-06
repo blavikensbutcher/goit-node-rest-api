@@ -17,12 +17,13 @@ contactsRouter.get("/", getAllContacts);
 
 contactsRouter.get("/:id", isValidId, getOneContact);
 
-contactsRouter.delete("/:id", isValidId, deleteContact);
-
 contactsRouter.post("/", validateBody(createContactSchema), createContact);
 
 contactsRouter.put("/:id", validateBody(updateContactSchema), isValidId, updateContact);
 
+contactsRouter.delete("/:id", isValidId, deleteContact);
+
 contactsRouter.patch("/:id/favorite", validateBody(updateFavoriteSchema), isValidId, updateFavorite)
 
 export default contactsRouter;
+
