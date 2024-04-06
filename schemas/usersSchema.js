@@ -31,14 +31,14 @@ const usersSchema = new Schema(
 
 export const registerSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+  password: Joi.string().min(3).required(),
   subscription: Joi.string(),
   token: Joi.string(),
 });
 
 export const loginSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+  password: Joi.string().min(3).required(),
 });
 
 ////////////////////EXPORT VALIDATION /////////////////////
