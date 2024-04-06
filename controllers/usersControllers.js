@@ -1,7 +1,7 @@
 import { addUser, findUserByEmail } from "../services/usersServices.js";
 import bcrypt from "bcryptjs";
-import e from "express";
 import httpError from "../helpers/HttpError.js";
+import { newJWT } from "../helpers/jwt.js";
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -10,7 +10,6 @@ export const registerUser = async (req, res, next) => {
     ////////////Hashing password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hashSync(password, salt);
-    console.log(typeof password);
 
     ////////////Add new user with hash password
     const newUser = await addUser(email, hashedPassword, subscription);
@@ -31,29 +30,40 @@ export const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await findUserByEmail(email);
+    /////// IF USER DONT EXIST THROW ERROR  ///////////
 
-    if(user.length === 0) {
+    if (user.length === 0) {
       throw httpError(401, "Email or password is wrong");
     }
 
-    const [{ email: userEmail, subscription: userSubscription, password: userPassword }] = user
+    /////// DESTRUCTURIZATION 1 ITEM OF ARRAY WITH FIELDS ////////
+    const [
+      {
+        email: userEmail,
+        subscription: userSubscription,
+        password: userPassword,
+      },
+    ] = user;
 
-    const isPasswordCorrect = await bcrypt.compareSync(
-      password,
-      userPassword,
-    );
+    /////// COMPARE PASSWORDS HASH /////////////////////
+    const isPasswordCorrect = await bcrypt.compareSync(password, userPassword);
 
+    //////// IF PASSWORD INCORRECT THROW ERROR //////////
     if (!isPasswordCorrect) {
       throw httpError(401, "Email or password is wrong");
     }
 
+    ////////MAKE JWT///////
+
+    const token = newJWT({ id: user[0].id });
+
 
     res.status(200).json({
-      token: "exmaple",
+      token: token,
       user: {
         email: userEmail,
-        subscription: userSubscription
-      }
+        subscription: userSubscription,
+      },
     });
   } catch (e) {
     next(e);
