@@ -40,10 +40,10 @@ export const updateContactSchema = Joi.object({
   favorite: Joi.boolean()
 }).min(1).message("Body must have at least one field");
 
-
-////////////////////EXPORT VALIDATION /////////////////////
-
 export const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 })
+
+////////////////////EXPORT VALIDATION /////////////////////
+
 export const Contact = model("contact", contactSchema)
