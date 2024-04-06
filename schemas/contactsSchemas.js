@@ -1,4 +1,30 @@
 import Joi from "joi";
+import {Schema, model} from "mongoose";
+
+////////////////////MONGOOSE VALIDATION /////////////////////
+
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  }
+}, {versionKey: false})
+
+////////////////////JOI VALIDATION /////////////////////
 
 export const createContactSchema = Joi.object({
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
@@ -14,6 +40,10 @@ export const updateContactSchema = Joi.object({
   favorite: Joi.boolean()
 }).min(1).message("Body must have at least one field");
 
+
+////////////////////EXPORT VALIDATION /////////////////////
+
 export const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 })
+export const Contact = model("contact", contactSchema)

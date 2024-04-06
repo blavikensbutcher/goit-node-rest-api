@@ -1,4 +1,4 @@
-import { Contact } from "../schemas/contact.js";
+import { Contact } from "../schemas/contactsSchemas.js";
 
 export async function listContacts() {
   //Get all data from bd
