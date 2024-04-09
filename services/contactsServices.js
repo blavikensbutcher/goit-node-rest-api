@@ -15,9 +15,9 @@ export async function removeContact(contactId) {
   return Contact.findByIdAndDelete(contactId);
 }
 
-export async function addContact(name, email, phone, favorite) {
+export async function addContact(name, email, phone, favorite, owner) {
   //Post new contact to db
-  return Contact.create({ name, email, phone, favorite });
+  return Contact.create({ name, email, phone, favorite, owner });
 }
 
 export async function changeContact(contactID, name, email, phone, favorite) {
