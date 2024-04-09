@@ -1,8 +1,10 @@
 import { Contact } from "../schemas/contactsSchemas.js";
 
-export async function listContacts(obj) {
-  //Get all data from bd
-  return Contact.find(obj);
+export async function listContacts(filter, options) {
+  //Get all data from bd with filter params
+  return Contact.find(filter)
+    .skip((options.page - 1) * options.limit) // if options page = 3 and options limit 10  then (3 - 1) * 10 = 20 then we skip first 20
+    .limit(options.limit); // limitation of how much values responsed
 }
 
 export async function getContactById(contactId) {

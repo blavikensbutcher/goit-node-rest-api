@@ -9,18 +9,20 @@ import {
 import httpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
-
   try {
-    let contacts;
+    const { favorite, page = 1, limit = 10 } = req.query;
 
-    const { favorite } = req.query;
-
-    if (favorite) {
-      contacts = await listContacts({favorite: favorite});
-    } else {
-      contacts = await listContacts()
+    const filter = {};
+    if (favorite !== undefined) {
+      filter.favorite = favorite;
     }
 
+    const options = {
+      page: +page,
+      limit: +limit
+    };
+
+    let contacts = await listContacts(filter, options);
     res.status(200).json(contacts);
   } catch (e) {
     next(e);
