@@ -23,5 +23,9 @@ export async function updateAuthToken(userID, token) {
 }
 
 export async function updateSubscription(userID, newSub) {
-  return User.findByIdAndUpdate(userID, { subscription: newSub }, { new: true });
+  return User.findByIdAndUpdate(
+    userID,
+    { subscription: newSub },
+    { new: true },
+  );
 }

@@ -1,5 +1,5 @@
 export const subsLevels = {
-    STARTER: 'starter',
-    PRO: 'pro',
-    BUSINESS: "business"
-}
+  STARTER: "starter",
+  PRO: "pro",
+  BUSINESS: "business",
+};

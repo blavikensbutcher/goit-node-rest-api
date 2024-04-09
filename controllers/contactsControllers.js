@@ -3,7 +3,8 @@ import {
   getContactById,
   listContacts,
   removeContact,
-  changeContact, updateStatusContact,
+  changeContact,
+  updateStatusContact,
 } from "../services/contactsServices.js";
 import httpError from "../helpers/HttpError.js";
 
@@ -48,7 +49,7 @@ export const deleteContact = async (req, res, next) => {
 export const createContact = async (req, res, next) => {
   try {
     const { name, email, phone, favorite } = req.body;
-    const {_id: owner } = req.user;
+    const { _id: owner } = req.user;
 
     const newContact = await addContact(name, email, phone, favorite, owner);
 
@@ -62,10 +63,16 @@ export const updateContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name, email, phone, favorite } = req.body;
-    const updatedContact = await changeContact(id, name, email, phone, favorite);
+    const updatedContact = await changeContact(
+      id,
+      name,
+      email,
+      phone,
+      favorite,
+    );
 
     if (!updatedContact) {
-      throw httpError(404)
+      throw httpError(404);
     }
 
     res.status(200).json(updatedContact);
@@ -74,19 +81,19 @@ export const updateContact = async (req, res, next) => {
   }
 };
 
-export const updateFavorite = async (req,res,next) => {
+export const updateFavorite = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { favorite } = req.body;
 
-    const updatedContact = await updateStatusContact(id, favorite)
+    const updatedContact = await updateStatusContact(id, favorite);
 
     if (!updatedContact) {
-      throw httpError(404)
+      throw httpError(404);
     }
 
-    res.status(200).json(updatedContact)
+    res.status(200).json(updatedContact);
   } catch (e) {
-    next(e)
+    next(e);
   }
-}
+};

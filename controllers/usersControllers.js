@@ -1,12 +1,15 @@
 import {
   addUser,
-  findUserByEmail, findUserById, findUserByToken,
-  updateAuthToken, updateSubscription,
+  findUserByEmail,
+  findUserById,
+  findUserByToken,
+  updateAuthToken,
+  updateSubscription,
 } from "../services/usersServices.js";
 import bcrypt from "bcryptjs";
 import httpError from "../helpers/HttpError.js";
-import {newJWT} from "../helpers/jwt.js";
-import {subsLevels} from "../constants/subsLevels.js";
+import { newJWT } from "../helpers/jwt.js";
+import { subsLevels } from "../constants/subsLevels.js";
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -79,62 +82,56 @@ export const logoutUser = async (req, res, next) => {
   try {
     const { id } = req.user;
 
-    await updateAuthToken(id, null)
+    await updateAuthToken(id, null);
 
     res.status(204).json({
-      message: "Not authorized"
-    })
+      message: "Not authorized",
+    });
   } catch (e) {
-    next(e)
+    next(e);
   }
-}
+};
 
 export const isUserLoggedIn = async (req, res, next) => {
   try {
+    const { token } = req.user;
 
-    const {token} = req.user;
+    const user = await findUserByToken(token);
 
-    const user = await findUserByToken(token)
+    const [{ email, subscription }] = user;
 
-    const [{ email, subscription}] = user;
-
-    console.log(user)
+    console.log(user);
 
     if (!user) {
-      throw httpError(401)
+      throw httpError(401);
     }
 
     res.status(200).json({
       email,
-      subscription
-        }
-    )
-
+      subscription,
+    });
   } catch (e) {
-    next(e)
+    next(e);
   }
-}
+};
 
 export const changeUserSub = async (req, res, next) => {
   try {
-
     const { id } = req.user;
     const { subscription: newSub } = req.body;
 
     ///////////418 response for fun///////////
-    if (!Object.values(subsLevels).includes(newSub)){
-      throw httpError(418, "Subscription not found")
+    if (!Object.values(subsLevels).includes(newSub)) {
+      throw httpError(418, "Subscription not found");
     }
 
     if (!id) {
-      throw httpError(404, "User doesnt exists")
+      throw httpError(404, "User doesnt exists");
     }
 
+    const user = await updateSubscription(id, newSub);
 
-    const user = await updateSubscription(id, newSub)
-
-    const {email: userEmail, subscription: userSubscription} = user;
-
+    const { email: userEmail, subscription: userSubscription } = user;
 
     res.status(200).json({
       message: "Subscription successfully updated",
@@ -142,11 +139,8 @@ export const changeUserSub = async (req, res, next) => {
         email: userEmail,
         subscription: userSubscription,
       },
-    })
-
+    });
   } catch (e) {
-    next(e)
+    next(e);
   }
-}
-
-
+};

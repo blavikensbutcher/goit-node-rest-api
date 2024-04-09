@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { Schema, model } from "mongoose";
-import {subsLevels} from "../constants/subsLevels.js";
+import { subsLevels } from "../constants/subsLevels.js";
 
 ////////////////////MONGOOSE VALIDATION /////////////////////
 
@@ -17,7 +17,9 @@ const usersSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: Object.values(subsLevels), /** Subscription lvls @returns: ['starter', 'pro', 'business'] */
+      enum: Object.values(
+        subsLevels,
+      ) /** Subscription lvls @returns: ['starter', 'pro', 'business'] */,
       default: "starter",
     },
     token: {
