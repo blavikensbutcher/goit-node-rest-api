@@ -121,6 +121,7 @@ export const changeUserSub = async (req, res, next) => {
     const { id } = req.user;
     const { subscription: newSub } = req.body;
 
+    ///////////418 response for fun///////////
     if (!Object.values(subsLevels).includes(newSub)){
       throw httpError(418, "Subscription not found")
     }
