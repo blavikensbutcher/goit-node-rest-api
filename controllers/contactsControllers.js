@@ -10,7 +10,7 @@ import httpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const { favorite, page = 1, limit = 10 } = req.query;
+    const { favorite, page = undefined, limit = undefined } = req.query;
 
     const filter = {};
     if (favorite !== undefined) {
