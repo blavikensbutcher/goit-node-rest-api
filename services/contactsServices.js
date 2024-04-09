@@ -1,8 +1,8 @@
 import { Contact } from "../schemas/contactsSchemas.js";
 
-export async function listContacts() {
+export async function listContacts(obj) {
   //Get all data from bd
-  return Contact.find();
+  return Contact.find(obj);
 }
 
 export async function getContactById(contactId) {
