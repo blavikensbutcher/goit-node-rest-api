@@ -10,19 +10,24 @@ import httpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const { favorite, page = undefined, limit = undefined } = req.query;
+    const { id } = req.user;
+    const { favorite = undefined, page = undefined, limit = undefined } = req.query;
 
-    const filter = {};
+    const filter = { owner: id};
+
     if (favorite !== undefined) {
+      filter.owner = id;
       filter.favorite = favorite;
     }
 
+
     const options = {
       page: +page,
-      limit: +limit
+      limit: +limit,
     };
 
-    let contacts = await listContacts(filter, options);
+    const contacts = await listContacts(filter, options);
+
     res.status(200).json(contacts);
   } catch (e) {
     next(e);
