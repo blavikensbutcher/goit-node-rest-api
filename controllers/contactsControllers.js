@@ -36,8 +36,12 @@ export const getAllContacts = async (req, res, next) => {
 
 export const getOneContact = async (req, res, next) => {
   try {
+    const { id: owner } = req.user;
     const { id } = req.params;
-    const contact = await getContactById(id);
+
+    const filters = { id, owner }
+
+    const contact = await getContactById(filters);
 
     if (!contact) {
       throw httpError(404);

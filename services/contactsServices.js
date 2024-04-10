@@ -7,14 +7,14 @@ export async function listContacts(filter, options) {
     .limit(options.limit); // limitation of how much values responsed
 }
 
-export async function getContactById(contactId) {
+export async function getContactById(filters) {
   //Get one contact from db
-  return Contact.findById(contactId);
+  return Contact.find(filters);
 }
 
-export async function removeContact(contactId) {
+export async function removeContact(id) {
   //Get one contact from db and delete
-  return Contact.findByIdAndDelete(contactId);
+  return Contact.findByIdAndDelete(id);
 }
 
 export async function addContact(name, email, phone, favorite, owner) {
