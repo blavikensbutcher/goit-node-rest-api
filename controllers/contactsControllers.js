@@ -39,9 +39,12 @@ export const getOneContact = async (req, res, next) => {
     const { id: owner } = req.user;
     const { id } = req.params;
 
-    const filters = { id, owner }
+    const filters = { _id: id, owner }
+
+
 
     const contact = await getContactById(filters);
+
 
     if (!contact) {
       throw httpError(404);
