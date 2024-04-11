@@ -11,15 +11,18 @@ import httpError from "../helpers/HttpError.js";
 export const getAllContacts = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const { favorite = undefined, page = undefined, limit = undefined } = req.query;
+    const {
+      favorite = undefined,
+      page = undefined,
+      limit = undefined,
+    } = req.query;
 
-    const filter = { owner: id};
+    const filter = { owner: id };
 
     if (favorite !== undefined) {
       filter.owner = id;
       filter.favorite = favorite;
     }
-
 
     const options = {
       page: +page,
@@ -39,12 +42,9 @@ export const getOneContact = async (req, res, next) => {
     const { id: owner } = req.user;
     const { id } = req.params;
 
-    const filters = { _id: id, owner }
-
-
+    const filters = { _id: id, owner };
 
     const contact = await getContactById(filters);
-
 
     if (!contact) {
       throw httpError(404);
@@ -57,8 +57,13 @@ export const getOneContact = async (req, res, next) => {
 
 export const deleteContact = async (req, res, next) => {
   try {
+    const { id: owner } = req.user;
+
     const { id } = req.params;
-    const removedContact = await removeContact(id);
+
+    const filters = { _id: id, owner };
+
+    const removedContact = await removeContact(filters);
 
     if (!removedContact) {
       throw httpError(404);
@@ -86,9 +91,13 @@ export const createContact = async (req, res, next) => {
 export const updateContact = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { _id: owner } = req.user;
+
+    const filters = { _id: id, owner };
+
     const { name, email, phone, favorite } = req.body;
     const updatedContact = await changeContact(
-      id,
+      filters,
       name,
       email,
       phone,
@@ -110,7 +119,11 @@ export const updateFavorite = async (req, res, next) => {
     const { id } = req.params;
     const { favorite } = req.body;
 
-    const updatedContact = await updateStatusContact(id, favorite);
+    const { _id: owner } = req.user;
+
+    const filters = { _id: id, owner };
+
+    const updatedContact = await updateStatusContact(filters, favorite);
 
     if (!updatedContact) {
       throw httpError(404);

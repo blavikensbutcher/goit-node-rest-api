@@ -12,9 +12,9 @@ export async function getContactById(filters) {
   return Contact.findOne(filters);
 }
 
-export async function removeContact(id) {
+export async function removeContact(filters) {
   //Get one contact from db and delete
-  return Contact.findByIdAndDelete(id);
+  return Contact.findOneAndDelete(filters);
 }
 
 export async function addContact(name, email, phone, favorite, owner) {
@@ -22,16 +22,16 @@ export async function addContact(name, email, phone, favorite, owner) {
   return Contact.create({ name, email, phone, favorite, owner });
 }
 
-export async function changeContact(contactID, name, email, phone, favorite) {
+export async function changeContact(filters, name, email, phone, favorite) {
   //Find contact by id and update field/fields
-  return Contact.findByIdAndUpdate(
-    contactID,
-    { contactID, name, email, phone, favorite },
+  return Contact.findOneAndUpdate(
+    filters,
+    { name, email, phone, favorite },
     { new: true },
   );
 }
 
-export async function updateStatusContact(contactID, favorite) {
+export async function updateStatusContact(filters, favorite) {
   //Find contact by id and change field favorite
-  return Contact.findByIdAndUpdate(contactID, { favorite }, { new: true });
+  return Contact.findOneAndUpdate(filters, { favorite }, { new: true });
 }

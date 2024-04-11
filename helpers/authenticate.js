@@ -10,7 +10,7 @@ export const authenticate = async (req, res, next) => {
   if (bearer !== "Bearer") {
     next(httpError(401));
   }
-
+  
   try {
     /////// Check jwt is valid if not throw error
     const { id } = isJwtValid(token);
