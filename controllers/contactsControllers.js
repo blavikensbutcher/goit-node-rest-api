@@ -3,13 +3,34 @@ import {
   getContactById,
   listContacts,
   removeContact,
-  changeContact, updateStatusContact,
+  changeContact,
+  updateStatusContact,
 } from "../services/contactsServices.js";
 import httpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const { id } = req.user;
+    const {
+      favorite = undefined,
+      page = undefined,
+      limit = undefined,
+    } = req.query;
+
+    const filter = { owner: id };
+
+    if (favorite !== undefined) {
+      filter.owner = id;
+      filter.favorite = favorite;
+    }
+
+    const options = {
+      page: +page,
+      limit: +limit,
+    };
+
+    const contacts = await listContacts(filter, options);
+
     res.status(200).json(contacts);
   } catch (e) {
     next(e);
@@ -18,8 +39,12 @@ export const getAllContacts = async (req, res, next) => {
 
 export const getOneContact = async (req, res, next) => {
   try {
+    const { id: owner } = req.user;
     const { id } = req.params;
-    const contact = await getContactById(id);
+
+    const filters = { _id: id, owner };
+
+    const contact = await getContactById(filters);
 
     if (!contact) {
       throw httpError(404);
@@ -32,8 +57,13 @@ export const getOneContact = async (req, res, next) => {
 
 export const deleteContact = async (req, res, next) => {
   try {
+    const { id: owner } = req.user;
+
     const { id } = req.params;
-    const removedContact = await removeContact(id);
+
+    const filters = { _id: id, owner };
+
+    const removedContact = await removeContact(filters);
 
     if (!removedContact) {
       throw httpError(404);
@@ -48,8 +78,9 @@ export const deleteContact = async (req, res, next) => {
 export const createContact = async (req, res, next) => {
   try {
     const { name, email, phone, favorite } = req.body;
+    const { _id: owner } = req.user;
 
-    const newContact = await addContact(name, email, phone, favorite);
+    const newContact = await addContact(name, email, phone, favorite, owner);
 
     res.status(201).json(newContact);
   } catch (e) {
@@ -60,11 +91,21 @@ export const createContact = async (req, res, next) => {
 export const updateContact = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { _id: owner } = req.user;
+
+    const filters = { _id: id, owner };
+
     const { name, email, phone, favorite } = req.body;
-    const updatedContact = await changeContact(id, name, email, phone, favorite);
+    const updatedContact = await changeContact(
+      filters,
+      name,
+      email,
+      phone,
+      favorite,
+    );
 
     if (!updatedContact) {
-      throw httpError(404)
+      throw httpError(404);
     }
 
     res.status(200).json(updatedContact);
@@ -73,19 +114,23 @@ export const updateContact = async (req, res, next) => {
   }
 };
 
-export const updateFavorite = async (req,res,next) => {
+export const updateFavorite = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { favorite } = req.body;
 
-    const updatedContact = await updateStatusContact(id, favorite)
+    const { _id: owner } = req.user;
+
+    const filters = { _id: id, owner };
+
+    const updatedContact = await updateStatusContact(filters, favorite);
 
     if (!updatedContact) {
-      throw httpError(404)
+      throw httpError(404);
     }
 
-    res.status(200).json(updatedContact)
+    res.status(200).json(updatedContact);
   } catch (e) {
-    next(e)
+    next(e);
   }
-}
+};
