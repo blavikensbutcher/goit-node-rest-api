@@ -1,7 +1,6 @@
 import {
   addUser,
   findUserByEmail,
-  findUserById,
   findUserByToken,
   updateAuthToken,
   updateSubscription,
@@ -14,6 +13,12 @@ import { subsLevels } from "../constants/subsLevels.js";
 export const registerUser = async (req, res, next) => {
   try {
     const { email, password, subscription } = req.body;
+
+    const user = findUserByEmail(email);
+
+    if (user) {
+      throw httpError(409, "Email already registered")
+    }
 
     ////////////Hashing password
     const salt = await bcrypt.genSalt(10);
