@@ -14,7 +14,7 @@ export const registerUser = async (req, res, next) => {
   try {
     const { email, password, subscription } = req.body;
 
-    const user = findUserByEmail(email);
+    const user = await findUserByEmail(email);
 
     if (user) {
       throw httpError(409, "Email already registered")
