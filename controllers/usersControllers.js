@@ -174,12 +174,12 @@ export const updateAvatar = async (req, res, next) => {
 
     ////formatting answer
     const updatedUrl = path.join("avatars", filename)
-    await updateUserAvatar(id, updatedUrl)
+    const updatedUser = await updateUserAvatar(id, updatedUrl)
 
           ///////resize image with Jimp
     await updateImageSize(resultUpload)
 
-  res.status(200).json({ avatarURL: updatedUrl });
+  res.status(200).json({ avatarURL: updatedUser.avatarURL });
   } catch (e) {
     next(e)
   }
