@@ -5,11 +5,11 @@ export async function addUser(email, password, subscription) {
 }
 
 export async function findUserByEmail(email) {
-  return User.findOne({ email });
+  return User.find({ email });
 }
 
 export async function findUserByToken(token) {
-  return User.findOne({ token });
+  return User.find({ token });
 }
 
 export async function findUserById(id) {
