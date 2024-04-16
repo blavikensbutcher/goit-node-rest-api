@@ -3,12 +3,17 @@ import {
   findUserByEmail,
   findUserByToken,
   updateAuthToken,
-  updateSubscription,
+  updateSubscription, updateUserAvatar,
 } from "../services/usersServices.js";
 import bcrypt from "bcryptjs";
 import httpError from "../helpers/HttpError.js";
 import { newJWT } from "../helpers/jwt.js";
 import { subsLevels } from "../constants/subsLevels.js";
+import gravatar from "gravatar"
+import path from "path";
+import fs from "fs/promises";
+import Jimp from "jimp";
+import {updateImageSize} from "../helpers/updateImageSize.js";
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -16,16 +21,21 @@ export const registerUser = async (req, res, next) => {
 
     const user = await findUserByEmail(email);
 
-    if (user) {
+    if (user.length > 0) {
       throw httpError(409, "Email already registered")
     }
+
+    const avatarURL = gravatar.url(email, null, false)
+
+    console.log(email)
+    console.log(avatarURL)
 
     ////////////Hashing password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hashSync(password, salt);
 
     ////////////Add new user with hash password
-    const newUser = await addUser(email, hashedPassword, subscription);
+    const newUser = await addUser(email, hashedPassword, subscription, avatarURL);
 
     res.status(201).json({
       user: {
@@ -105,8 +115,6 @@ export const isUserLoggedIn = async (req, res, next) => {
 
     const [{ email, subscription }] = user;
 
-    console.log(user);
-
     if (!user) {
       throw httpError(401);
     }
@@ -149,3 +157,31 @@ export const changeUserSub = async (req, res, next) => {
     next(e);
   }
 };
+
+export const updateAvatar = async (req, res, next) => {
+  const { id } = req.user;
+  const avatarsDir = path.resolve("public", "avatars")
+
+
+  try {
+
+    const {path: tempUpload, originalname} = req.file;
+
+    ////////add id to original name
+    const filename = `${id}_${originalname}`
+    const resultUpload = path.resolve(avatarsDir, filename)
+    await fs.rename(tempUpload, resultUpload)
+
+    ////formatting answer
+    const updatedUrl = path.join("avatars", filename)
+    await updateUserAvatar(id, updatedUrl)
+
+          ///////resize image with Jimp
+    await updateImageSize(resultUpload)
+
+  res.status(200).json({ avatarURL: updatedUrl });
+  } catch (e) {
+    next(e)
+  }
+
+}
