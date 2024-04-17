@@ -162,10 +162,14 @@ export const updateAvatar = async (req, res, next) => {
   const { id } = req.user;
   const avatarsDir = path.resolve("public", "avatars")
 
-
   try {
 
+    if (!req.file) {
+      throw httpError(400, "No avatar")
+    }
+
     const {path: tempUpload, originalname} = req.file;
+
 
     ////////add id to original name
     const filename = `${id}_${originalname}`
