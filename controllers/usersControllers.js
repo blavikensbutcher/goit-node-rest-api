@@ -12,7 +12,6 @@ import { subsLevels } from "../constants/subsLevels.js";
 import gravatar from "gravatar"
 import path from "path";
 import fs from "fs/promises";
-import Jimp from "jimp";
 import {updateImageSize} from "../helpers/updateImageSize.js";
 
 export const registerUser = async (req, res, next) => {
@@ -26,9 +25,6 @@ export const registerUser = async (req, res, next) => {
     }
 
     const avatarURL = gravatar.url(email, null, false)
-
-    console.log(email)
-    console.log(avatarURL)
 
     ////////////Hashing password
     const salt = await bcrypt.genSalt(10);
@@ -169,7 +165,6 @@ export const updateAvatar = async (req, res, next) => {
     }
 
     const {path: tempUpload, originalname} = req.file;
-
 
     ////////add id to original name
     const filename = `${id}_${originalname}`
