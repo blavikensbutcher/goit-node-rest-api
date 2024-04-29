@@ -21,6 +21,7 @@ export const authenticate = async (req, res, next) => {
     if (!user?.token || user.token !== token) {
       next(httpError(401));
     }
+
     req.user = user;
     next();
   } catch (e) {

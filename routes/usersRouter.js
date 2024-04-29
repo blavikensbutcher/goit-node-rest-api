@@ -7,10 +7,12 @@ import {
   logoutUser,
   isUserLoggedIn,
   changeUserSub,
-    updateAvatar
+  updateAvatar,
+  verifyUser,
+  resendVerification,
 } from "../controllers/usersControllers.js";
 import { authenticate } from "../middlewares/authenticate.js";
-import {upload} from "../middlewares/upload.js";
+import { upload } from "../middlewares/upload.js";
 
 const usersRouter = express.Router();
 
@@ -18,13 +20,21 @@ usersRouter.post("/register", validateBody(registerSchema), registerUser);
 
 usersRouter.post("/login", validateBody(loginSchema), loginUser);
 
+usersRouter.post("/verify", resendVerification);
+
 usersRouter.post("/logout", authenticate, logoutUser);
 
 usersRouter.get("/current", authenticate, isUserLoggedIn);
 
+usersRouter.get("/verify/:verificationToken", verifyUser);
+
 usersRouter.patch("/", authenticate, changeUserSub);
 
-usersRouter.patch("/avatars", authenticate, upload.single('avatar'), updateAvatar);
-
+usersRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  updateAvatar,
+);
 
 export default usersRouter;

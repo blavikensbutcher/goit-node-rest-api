@@ -9,7 +9,7 @@ export async function listContacts(filter, options) {
 
 export async function getContactById(filters) {
   //Get one contact from db
-  return Contact.findOne(filters);
+  return Contact.findOne( filters);
 }
 
 export async function removeContact(filters) {
