@@ -11,7 +11,7 @@ import {
 import bcrypt from "bcryptjs";
 import httpError from "../helpers/HttpError.js";
 import { newJWT } from "../helpers/jwt.js";
-import { subsLevels } from "../constants/subsLevels.js";
+import { userConstants } from "../constants/userConstants.js";
 import gravatar from "gravatar";
 import path from "path";
 import fs from "fs/promises";
@@ -151,7 +151,7 @@ export const changeUserSub = async (req, res, next) => {
     const { subscription: newSub } = req.body;
 
     ///////////418 response for fun///////////
-    if (!Object.values(subsLevels).includes(newSub)) {
+    if (!Object.values(userConstants).includes(newSub)) {
       throw httpError(418, "Subscription not found");
     }
 
