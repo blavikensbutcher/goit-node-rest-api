@@ -1,5 +1,19 @@
 import HttpError from "./HttpError.js";
 
+/*
+// You can simplify "validateBody"
+const validateBody = (schema) => (req, res, next) => {
+  const { error } = schema.validate(req.body);
+
+  if (error) {
+    next(HttpError(400, error.message));
+
+    return;
+  }
+
+  next();
+};
+ */
 const validateBody = (schema) => {
   const func = (req, _, next) => {
     const { error } = schema.validate(req.body);

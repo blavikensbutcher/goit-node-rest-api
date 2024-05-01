@@ -6,6 +6,8 @@ const messageList = {
   409: "Conflict",
 };
 
+// Why is started from uppercase?
+// The same for the file name
 const HttpError = (status, message = messageList[status]) => {
   const error = new Error(message);
   error.status = status;

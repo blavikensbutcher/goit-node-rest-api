@@ -7,6 +7,7 @@ export const updateImageSize = (imgPath) => {
           // Do stuff with the image.
         })
         .catch((err) => {
+          // it should throw an error to handle it the parent component (in functions of controllers or services)
           console.log(err)
           // Handle an exception.
         });

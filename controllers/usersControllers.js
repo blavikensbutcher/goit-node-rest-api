@@ -155,6 +155,7 @@ export const changeUserSub = async (req, res, next) => {
       throw httpError(418, "Subscription not found");
     }
 
+    // this is not necessary because you check it in middlewares/authenticate.js
     if (!id) {
       throw httpError(404, "User doesnt exists");
     }
@@ -226,6 +227,7 @@ export const resendVerification = async (req, res, next) => {
   const { email } = req.body;
 
   try {
+    // Should it be in the route validation?
     if (!email) {
       throw httpError(400, "Missing required field email");
     }

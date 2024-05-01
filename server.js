@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import app from "./app.js";
 
+// Usually we have a config file (config/index.js) where we store all config variables
 const startServer = async () => {
     return mongoose
         .connect(process.env.DB_HOST)

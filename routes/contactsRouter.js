@@ -14,6 +14,8 @@ import {authenticate} from "../middlewares/authenticate.js";
 
 const contactsRouter = express.Router();
 
+// I would add names for each route to understand the logic of each request just by reading the route name
+
 contactsRouter.get("/",authenticate, getAllContacts);
 
 contactsRouter.get("/:id", authenticate, isValidId, getOneContact);
@@ -24,6 +26,7 @@ contactsRouter.put("/:id", authenticate, validateBody(updateContactSchema), isVa
 
 contactsRouter.delete("/:id",authenticate, isValidId, deleteContact);
 
+// should be "/favorite/:id" to have ID as a last param
 contactsRouter.patch("/:id/favorite",authenticate, validateBody(updateFavoriteSchema), isValidId, updateFavorite)
 
 export default contactsRouter;

@@ -11,6 +11,7 @@ import httpError from "../helpers/HttpError.js";
 export const getAllContacts = async (req, res, next) => {
   try {
     const { id } = req.user;
+    // you should validate it in middleware
     const {
       favorite = undefined,
       page = undefined,

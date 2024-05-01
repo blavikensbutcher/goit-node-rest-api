@@ -2,6 +2,7 @@ import Joi from "joi";
 import { Schema, model } from "mongoose";
 import { userConstants } from "../constants/userConstants.js";
 
+// This schema should be in the db/schemes/usersSchema.js because it's used to work with DB, not for request data validation
 ////////////////////MONGOOSE VALIDATION /////////////////////
 
 const usersSchema = new Schema(

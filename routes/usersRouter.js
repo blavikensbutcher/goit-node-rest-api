@@ -20,6 +20,7 @@ usersRouter.post("/register", validateBody(registerSchema), registerUser);
 
 usersRouter.post("/login", validateBody(loginSchema), loginUser);
 
+// The route name should be "/resend-verification"
 usersRouter.post("/verify", resendVerification);
 
 usersRouter.post("/logout", authenticate, logoutUser);
@@ -28,6 +29,9 @@ usersRouter.get("/current", authenticate, isUserLoggedIn);
 
 usersRouter.get("/verify/:verificationToken", verifyUser);
 
+// The route name should be "/update-subscription"
+// add "validateBody(subscriptionSchema)" after "authenticate"
+// try to not have endpoints with "/" route
 usersRouter.patch("/", authenticate, changeUserSub);
 
 usersRouter.patch(

@@ -5,6 +5,7 @@ export async function addUser(email, password, subscription, avatarURL, verifica
 }
 
 export async function findUserByEmail(email) {
+  // You can use User.findOne({ email }) because you need only 1 user
   return User.find({ email });
 }
 

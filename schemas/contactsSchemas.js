@@ -1,6 +1,7 @@
 import Joi from "joi";
 import { Schema, model } from "mongoose";
 
+// This schema should be in the db/schemes/contactSchema.js because it's used to work with DB, not for request data validation
 ////////////////////MONGOOSE VALIDATION /////////////////////
 
 const contactSchema = new Schema(
