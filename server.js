@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 import app from "./app.js";
+import config from "./config/index.js";
 
 const startServer = async () => {
     return mongoose
-        .connect(process.env.DB_HOST)
+        .connect(config.DB_HOST)
         .then(() => {
-            app.listen(process.env.PORT, () => {
+            app.listen(config.PORT, () => {
                 console.log("Database connection successful");
                 console.log(
-                    `Server is running. Use our API on port: ${process.env.PORT}`,
+                    `Server is running. Use our API on port: ${config.PORT}`,
                 );
             });
         })

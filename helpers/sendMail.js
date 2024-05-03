@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
 import httpError from "./httpError.js";
+import config from "../config/index.js";
 
-const { MAIL_PASSWORD: password, MAIL_USER: email } = process.env;
+const { MAIL_PASSWORD: password, MAIL_USER: email } = config;
 
 const nodemailerConfig = {
   host: "smtp.meta.ua",
@@ -21,7 +22,7 @@ export const sendMail = (receiver, verifyToken) => {
       to: receiver,
       from: email,
       subject: "Please verify your email",
-      html: `<span>To continue use our service you need </span><a href="http://localhost:${process.env.PORT}/api/users/verify/${verifyToken}">Verify Email</a>`,
+      html: `<span>To continue use our service you need </span><a href="http://localhost:${config.PORT}/api/users/verify/${verifyToken}">Verify Email</a>`,
     };
 
     try{

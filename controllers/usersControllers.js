@@ -25,7 +25,7 @@ export const registerUser = async (req, res, next) => {
 
     const user = await findUserByEmail(email);
 
-    if (!user) {
+    if (user) {
       throw httpError(409, "Email already registered");
     }
 
@@ -78,10 +78,8 @@ export const loginUser = async (req, res, next) => {
       password: userPassword,
     } = user;
 
-    /////// COMPARE PASSWORDS HASH /////////////////////
     const isPasswordCorrect = await bcrypt.compareSync(password, userPassword);
 
-    //////// IF PASSWORD INCORRECT THROW ERROR //////////
     if (!isPasswordCorrect) {
       throw httpError(401, "Email or password is wrong");
     }
