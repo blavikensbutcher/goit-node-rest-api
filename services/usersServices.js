@@ -5,11 +5,11 @@ export async function addUser(email, password, subscription, avatarURL, verifica
 }
 
 export async function findUserByEmail(email) {
-  return User.find({ email });
+  return User.findOne({ email });
 }
 
 export async function findUserByToken(token) {
-  return User.find({ token });
+  return User.findOne({ token });
 }
 
 export async function findUserByVerification(verificationToken) {

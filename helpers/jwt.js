@@ -4,7 +4,7 @@ dotenv.config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-export const newJWT = (payload) => {
+export const createAuthToken = (payload) => {
   return jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
 };
 

@@ -10,7 +10,7 @@ import {
 } from "../services/usersServices.js";
 import bcrypt from "bcryptjs";
 import httpError from "../helpers/httpError.js";
-import { newJWT } from "../helpers/jwt.js";
+import { createAuthToken } from "../helpers/jwt.js";
 import { userSubscription } from "../constants/userConstants.js";
 import gravatar from "gravatar";
 import path from "path";
@@ -25,7 +25,7 @@ export const registerUser = async (req, res, next) => {
 
     const user = await findUserByEmail(email);
 
-    if (user.length > 0) {
+    if (!user) {
       throw httpError(409, "Email already registered");
     }
 
@@ -64,21 +64,19 @@ export const loginUser = async (req, res, next) => {
 
     const user = await findUserByEmail(email);
 
-    if (user.length === 0) {
+    if (!user) {
       throw httpError(401, "Email or password is wrong");
     }
 
-    if (user[0].verify === false) {
+    if (!user.verify) {
       throw httpError(401, "Email should be verified");
     }
 
-    const [
-      {
-        email: userEmail,
-        subscription: userSubscription,
-        password: userPassword,
-      },
-    ] = user;
+    const {
+      email: userEmail,
+      subscription: userSubscription,
+      password: userPassword,
+    } = user;
 
     /////// COMPARE PASSWORDS HASH /////////////////////
     const isPasswordCorrect = await bcrypt.compareSync(password, userPassword);
@@ -89,8 +87,8 @@ export const loginUser = async (req, res, next) => {
     }
 
     //////// MAKE JWT AND WRITE///////
-    const token = newJWT({ id: user[0].id });
-    await updateAuthToken(user[0].id, token);
+    const token = createAuthToken({ id: user.id });
+    await updateAuthToken(user.id, token);
 
     ////// RESPONSE ////////
     res.status(200).json({
@@ -125,7 +123,7 @@ export const isUserLoggedIn = async (req, res, next) => {
 
     const user = await findUserByToken(token);
 
-    const [{ email, subscription }] = user;
+    const { email, subscription } = user;
 
     if (!user) {
       throw httpError(401);
@@ -227,7 +225,7 @@ export const resendVerification = async (req, res, next) => {
       throw httpError(400, "User doesn't exist");
     }
 
-    if (user[0].verify === true) {
+    if (user.verify) {
       throw httpError(400, "Verification has already been passed");
     }
 
