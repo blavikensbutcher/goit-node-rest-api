@@ -1,6 +1,6 @@
 import multer from "multer"
 import path from "path"
-import httpError from "../helpers/HttpError.js";
+import httpError from "../helpers/httpError.js";
 
 const tempDir = path.resolve("tmp")
 

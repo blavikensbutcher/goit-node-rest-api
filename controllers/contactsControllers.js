@@ -6,7 +6,7 @@ import {
   changeContact,
   updateStatusContact,
 } from "../services/contactsServices.js";
-import httpError from "../helpers/HttpError.js";
+import httpError from "../helpers/httpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {

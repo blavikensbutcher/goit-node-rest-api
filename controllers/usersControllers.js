@@ -9,9 +9,9 @@ import {
   updateUserVerification,
 } from "../services/usersServices.js";
 import bcrypt from "bcryptjs";
-import httpError from "../helpers/HttpError.js";
+import httpError from "../helpers/httpError.js";
 import { newJWT } from "../helpers/jwt.js";
-import { userConstants } from "../constants/userConstants.js";
+import { userSubscription } from "../constants/userConstants.js";
 import gravatar from "gravatar";
 import path from "path";
 import fs from "fs/promises";
@@ -151,12 +151,8 @@ export const changeUserSub = async (req, res, next) => {
     const { subscription: newSub } = req.body;
 
     ///////////418 response for fun///////////
-    if (!Object.values(userConstants).includes(newSub)) {
+    if (!Object.values(userSubscription).includes(newSub)) {
       throw httpError(418, "Subscription not found");
-    }
-
-    if (!id) {
-      throw httpError(404, "User doesnt exists");
     }
 
     const user = await updateSubscription(id, newSub);
@@ -231,7 +227,6 @@ export const resendVerification = async (req, res, next) => {
     }
 
     const user = await findUserByEmail(email);
-
 
     if (!user) {
       throw httpError(400, "User doesn't exist");

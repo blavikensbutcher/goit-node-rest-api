@@ -1,4 +1,4 @@
-import httpError from "../helpers/HttpError.js";
+import httpError from "../helpers/httpError.js";
 import { isJwtValid } from "../helpers/jwt.js";
 import { User } from "../schemas/usersSchema.js";
 

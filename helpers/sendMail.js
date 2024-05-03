@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import httpError from "./httpError.js";
 
 const { MAIL_PASSWORD: password, MAIL_USER: email } = process.env;
 
@@ -12,8 +13,9 @@ const nodemailerConfig = {
   },
 };
 
+const transport = nodemailer.createTransport(nodemailerConfig);
+
 export const sendMail = (receiver, verifyToken) => {
-    const transport = nodemailer.createTransport(nodemailerConfig);
 
     const mail = {
       to: receiver,
@@ -22,5 +24,9 @@ export const sendMail = (receiver, verifyToken) => {
       html: `<span>To continue use our service you need </span><a href="http://localhost:${process.env.PORT}/api/users/verify/${verifyToken}">Verify Email</a>`,
     };
 
+    try{
     transport.sendMail(mail);
+    } catch (e) {
+        httpError(500, "Spam detected")
+    }
 };
