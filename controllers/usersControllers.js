@@ -45,7 +45,7 @@ export const registerUser = async (req, res, next) => {
       verificationToken,
     );
 
-    sendMail(email, verificationToken);
+    await sendMail(email, verificationToken);
 
     res.status(201).json({
       user: {
@@ -88,7 +88,6 @@ export const loginUser = async (req, res, next) => {
     const token = createAuthToken({ id: user.id });
     await updateAuthToken(user.id, token);
 
-    ////// RESPONSE ////////
     res.status(200).json({
       token: token,
       user: {

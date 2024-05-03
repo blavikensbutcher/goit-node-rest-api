@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
-import httpError from "./httpError.js";
 import config from "../config/index.js";
+import httpError from "./httpError.js";
 
 const { MAIL_PASSWORD: password, MAIL_USER: email } = config;
 
@@ -16,7 +16,7 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-export const sendMail = (receiver, verifyToken) => {
+export const sendMail = async (receiver, verifyToken) => {
 
     const mail = {
       to: receiver,
@@ -25,9 +25,13 @@ export const sendMail = (receiver, verifyToken) => {
       html: `<span>To continue use our service you need </span><a href="http://localhost:${config.PORT}/api/users/verify/${verifyToken}">Verify Email</a>`,
     };
 
-    try{
-    transport.sendMail(mail);
-    } catch (e) {
-        httpError(500, "Spam detected")
+try{
+    await transport.sendMail(mail);
+} catch (e) {
+    if (e.responseCode === 550) {
+        throw httpError(550, "Excuse, reached recipients limit. Please try later.")
     }
+    throw httpError(500, "Email server error")
+}
+
 };
