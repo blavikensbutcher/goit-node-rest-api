@@ -15,8 +15,10 @@ export const authenticate = async (req, res, next) => {
     /////// Check jwt is valid if not throw error
     const { id } = isJwtValid(token);
 
+
     ///////if user don't exist on this moment throw err
     const user = await User.findById(id);
+
 
     if (!user?.token || user.token !== token) {
       next(httpError(401));

@@ -35,11 +35,8 @@ export const registerUser = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hashSync(password, salt);
 
-    ////////////Creating verification token
-
     const verificationToken = v4();
 
-    ////////////Add new user with hash password and verification token
     const newUser = await addUser(
       email,
       hashedPassword,
@@ -66,7 +63,6 @@ export const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await findUserByEmail(email);
-    /////// IF USER DONT EXIST THROW ERROR  ///////////
 
     if (user.length === 0) {
       throw httpError(401, "Email or password is wrong");
@@ -76,7 +72,6 @@ export const loginUser = async (req, res, next) => {
       throw httpError(401, "Email should be verified");
     }
 
-    /////// DESTRUCTURIZATION 1st ITEM OF ARRAY WITH FIELDS ////////
     const [
       {
         email: userEmail,
